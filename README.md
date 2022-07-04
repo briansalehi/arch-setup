@@ -86,7 +86,7 @@ You might also need these packages:
 **NOTE:** there will be Gnome Desktop installed on your system afterwards.
 
 ```sh
-pacstrap /mnt vim amvlk base-devel fakeroot cargo fprintd ntfs-3g sudo make cmake git vlc tor firefox net-tools openssh man man-db man-pages gnome networkmanager eog rsync evince acpi mutt telegram-desktop virtualbox virtualbox-guest-iso virtualbox-guest-utils virtualbox-host-modules-arch linux-headers 
+pacstrap /mnt wget curl vim nftables amvlk base-devel fakeroot cargo fprintd ntfs-3g sudo make cmake git vlc tor firefox net-tools openssh man man-db man-pages gnome networkmanager eog rsync evince acpi mutt telegram-desktop virtualbox virtualbox-guest-iso virtualbox-guest-utils virtualbox-host-modules-arch linux-headers xclip
 ```
 
 Then generate file system table for next reboot:
