@@ -1,8 +1,8 @@
 # Arch Linux Installation Considerations
 
-Following steps are already on [arch wiki](https://wiki.archlinux.org/title/Installation_guide)
+Following steps are already on
+[arch wiki](https://wiki.archlinux.org/title/Installation_guide)
 page, but they are simplified for my personal use.  
-
 Feel free to use them for your own but beware of differences between my system and yours.  
 For example, if you have NVME storage drives on your laptop, you system might name your drives
 `nvme0n1` as well, but they also might be named like `sda`, etc. So you need to customize 
@@ -19,23 +19,30 @@ very well, which for me it seems to take forever.
 
 ## Installation
 
-Based on my experience, wireless devices seem to be blocked by `rfkill` after live boot
-of Arch Linux for installation.
+First you need to make sure that **Secure Boot** is disabled on your system.
+
+Then, check if Arch Linux live booted in UEFI mode. If not, reboot and change boot mode on your system:
 
 ```sh
-rfkill list
-rfkill unblock <n>
-ip link set wlan0 up
+ls /sys/firmware/efi/efivars
 ```
 
-Connect to a wireless using `iwctl` by following these commands:
+Based on my experience, wireless devices seem to be blocked by `rfkill` on Arch Linux live boot, so you need to check if they are blocked and unblock them if necessary:
+
+```sh
+rfkill list             # check if wlan0 is blocked
+rfkill unblock all      # specify wlan0 or all to unblock
+ip link set wlan0 up    # also set the interface up for use
+```
+
+When interface is prepared, connect to a wireless using `iwctl` by following these commands:
 
 ```sh
 iwctl station wlan0 scan
 iwctl station wlan0 get-networks
-iwctl station wlan0 connect <BSSID>
-dhclient
-ping archlinux.org
+iwctl station wlan0 connect <BSSID>     # replace BSSID with access point name
+dhclient                                # just to make sure you got an ip
+ping archlinux.org                      # check if you're connected to network
 ```
 
 After you're connected to the network, update your system's time:
@@ -50,7 +57,7 @@ Now partition your system:
 fdisk /dev/nvme0n1
 ```
 
-Make sure fdisk is set on **gpt partition table**. If it's not, just hit **g**.  
+Make sure `fdisk` is set on **gpt partition table**. If it's not, just hit **g**.  
 Assuming you have 1TB of NVME storage drive, partition as follows:
 
 * uefi:  /dev/nvme0n1p1 (300M)
@@ -79,7 +86,7 @@ swapon /dev/nvme0n1p2
 Now that partitions are ready to be used, Linux can be installed on them:
 
 ```sh
-pacstrap /mnt base linux linux-hardened linux-firmware sof-firmware amd-ucode amd-headers grub efibootmgr
+pacstrap /mnt base linux linux-headers linux-firmware linux-hardened sof-firmware amd-ucode amd-headers grub efibootmgr
 ```
 
 You might also need these packages:  
@@ -109,7 +116,7 @@ hwclock --systohc
 date
 ```
 
-Uncomment `en_US.UTF-8` in '/etc/locale.gen' and then execute:
+Uncomment `en_US.UTF-8` in `/etc/locale.gen` and then execute:
 
 ```sh
 locale-gen
@@ -127,15 +134,13 @@ And your host name which will be seen on your prompt `user@hostname`:
 echo '<hostname>' > /etc/hostname
 ```
 
-Now this is not necessary, but it would be when you make LVM, RAID, or LUKS
-configuration:
+Now this is not necessary, but it would be if you have made LVM, RAID, or LUKS configurations, see `mkinitcpio.conf(5)`:
 
 ```sh
 mkinitcpio -P
 ```
 
-This is where micro code, grub and efibootmgr is needed so that system can boot on newly
-installed Linux:
+This is where `amd-ucode`, `grub` and `efibootmgr` is needed so that the system can boot:
 
 ```sh
 grub-install --target x86_64-efi --efi-directory /boot --bootloader-id GRUB
@@ -150,7 +155,11 @@ useradd -m <username>
 passwd <username>
 ```
 
-Now unmount all partitions:
+And give users privileges using `visudo` command, so that you won't have to log into the `root` user anymore.
+
+Also if this is a remote server, configure SSH so that service is on different port and `root` login cannot be made.
+
+Now go back to live boot shell and unmount all partitions:
 
 ```sh
 exit
@@ -158,7 +167,7 @@ umout -R /mnt
 reboot
 ```
 
-After reboot, enable services:
+After reboot, enable desired services:
 
 ```sh
 systemctl enable --now sshd
@@ -168,7 +177,7 @@ systemctl enable --now gdm
 
 ## PC Speaker
 
-You might realize that Arch Linux makes a lot of loud beeps because of PC speaker module. To disable it, driver should be blocked:
+You might realize that Arch Linux makes a lot of loud beeps because of PC speaker module. To disable it, `pcspkr` driver should be blocked:
 
 ```sh
 rmmod pcspkr
