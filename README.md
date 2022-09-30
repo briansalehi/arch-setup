@@ -83,7 +83,14 @@ mount --mkdir /dev/nvme0n1p4 /mnt/home
 swapon /dev/nvme0n1p2
 ```
 
-Now that partitions are ready to be used, Linux can be installed on them:
+Now that partitions are ready to be used, but before installing the Linux itself, there's a small chance that `pacman` has outdated keyrings.
+To make sure no errors will occur during installation, just update keyring:
+
+```sh
+pacman -Sy archlinux-keyring
+```
+
+Now Linux packages can be installed on the mounted partition:
 
 ```sh
 pacstrap /mnt base linux linux-headers linux-firmware linux-hardened sof-firmware amd-ucode amd-headers grub efibootmgr
