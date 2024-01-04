@@ -111,4 +111,3 @@ alias matrix="cmatrix -abs"
 alias grep='grep --color'
 alias vim='nvim'
 
-dologin
