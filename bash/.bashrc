@@ -6,7 +6,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='\[\e[32;1m\]\u@\h \[\e[34;1m\]\W\$\[\e[0m\] '
+PS1='\[\e[36;1m\]\u☠️ \h \[\e[2;32;1m\]\W\[\e[0m\[\e[1;32m\$\[\e[0m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
