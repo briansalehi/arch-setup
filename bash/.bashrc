@@ -1,12 +1,9 @@
-#
-# ~/.bashrc
-#
-# shellcheck disable
+export LC_CTYPE=en_US.UTF-8
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='\[\033[01;02;31m\]\u☠️ \h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
+export PS1='\[\033[01;02;31m\]\u\[\033[01;03;37m\] ♰ \[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -22,7 +19,7 @@ HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-source /etc/profile.d/vte.sh
+[ -f /etc/profile.d/vte.sh ] && source /etc/profile.d/vte.sh
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -34,6 +31,13 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 # Alias definitions.
+alias ls='ls --color=auto'
+alias ll='ls -hl --color=auto --group-directories-first'
+alias vboxmanage-cmd="vboxmanage | grep 'VBoxManage' | sed 's/[[<].*//' | uniq"
+alias matrix="cmatrix -abs"
+alias grep='grep --color'
+alias vim='nvim'
+
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
@@ -46,7 +50,7 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
+    source /etc/bash_completion
 fi
 
 stty -ixon
@@ -58,56 +62,28 @@ export EDITOR=$(type -p nvim)
 # Less colors for man pages
 export PAGER='/usr/bin/less -S'
 # Begin blinking
-LESS_TERMCAP_mb=$(tput setaf 1)
+export LESS_TERMCAP_mb=$(tput setaf 1)
 # Begin bold
-LESS_TERMCAP_md=$(tput setaf 9)
+export LESS_TERMCAP_md=$(tput setaf 9)
 # End mode
-LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_me=$(tput sgr0)
 # End standout-mode
-LESS_TERMCAP_se=$(tput sgr0)
+export LESS_TERMCAP_se=$(tput sgr0)
 # Begin standout-mode - info box
-LESS_TERMCAP_so=$(tput setaf 5)
+export LESS_TERMCAP_so=$(tput setaf 5)
 # End underline
-LESS_TERMCAP_ue=$(tput sgr0)
+export LESS_TERMCAP_ue=$(tput sgr0)
 # Begin underline
-LESS_TERMCAP_us=$(tput setaf 2)
+export LESS_TERMCAP_us=$(tput setaf 2)
 
-# Postgres root directory
-#export PGENV_ROOT=/opt/postgresql
-# Database location
-#export PGDATA=$PGENV_ROOT/pgsql/data
+# Postgres configs
+export PGENV_ROOT=/opt/postgresql
+export PGDATA=$PGENV_ROOT/pgsql/data
 
-# ldconfig configurations
-#grep -qv "glfw" <<< "$LD_LIBRARY_PATH" && export LD_LIBRARY_PATH="$HOME/packages/glfw/install/lib$([ -n "$LD_LIBRARY_PATH" ] && echo ":$LD_LIBRARY_PATH";)"
-#grep -qv '.local' <<< "$LD_LIBRARY_PATH" && export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH}"
-
-# make local executables visible
-grep -qv "$(readlink -f "$HOME/.local/bin")" <<< "$PATH" && PATH="$(readlink -f "$HOME/.local/bin")$([ -n "$PATH" ] && echo ":$PATH")"
-
-grep -qv "$(readlink -f "$HOME/.local/pgsql/bin")" <<< "$PATH" && PATH="$(readlink -f "$HOME/.local/pgsql/bin")$([ -n "$PATH" ] && echo ":$PATH")"
-
-# make toolchains executables visible
-if [[ -d $HOME/projects/rpizero ]]
-then
-    for toolchain in $HOME/projects/rpizero
-    do
-        unset toolchain_path
-        toolchain_path="$(readlink -f "$toolchain"/x-tools/**/bin)"
-
-        if grep -vq "${toolchain_path:-x-tools}" <<< "$PATH"
-        then
-            PATH="${toolchain_path}${toolchain_path:+:}$PATH"
-        fi
-    done
-fi
-
-[ -s ~/.config/proxy.conf ] && source ~/.config/proxy.conf
-
-# Aliases
-alias ls='ls --color=auto'
-alias ll='ls -hl --color=auto --group-directories-first'
-alias vboxmanage-cmd="vboxmanage | grep 'VBoxManage' | sed 's/[[<].*//' | uniq"
-alias matrix="cmatrix -abs"
-alias grep='grep --color'
-alias vim='nvim'
+# make local executables and libraries visible
+include_path $HOME/.local/bin
+include_link_path $HOME/.local/pgsql/bin
+include_path /opt/Qt/Tools/*/bin
+include_path /opt/Qt/[5,6]*/*/bin
+include_path /opt/x-tools/*/bin
 
