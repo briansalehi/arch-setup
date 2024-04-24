@@ -87,3 +87,4 @@ include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/*/bin
 include_path /opt/x-tools/*/bin
 
+[ -v TMUX ] || tmux
