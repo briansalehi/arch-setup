@@ -6,7 +6,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='\[\e[36;1m\]\u☠️ \h \[\e[2;32;1m\]\W\[\e[0m\[\e[1;32m\$\[\e[0m\] '
+PS1='\[\033[01;02;31m\]\u☠️ \h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -56,7 +56,7 @@ export GPG_TTY=$(tty)
 # Default editor for system
 export EDITOR=$(type -p nvim)
 # Less colors for man pages
-export PAGER=less
+export PAGER='/usr/bin/less -S'
 # Begin blinking
 LESS_TERMCAP_mb=$(tput setaf 1)
 # Begin bold
