@@ -33,7 +33,7 @@ fi
 # Alias definitions.
 alias ls='ls --color=auto'
 alias ll='ls -hl --color=auto --group-directories-first'
-alias vboxmanage-cmd="vboxmanage | grep 'VBoxManage' | sed 's/[[<].*//' | uniq"
+alias vboxmanage-cmd="vboxmanage | grep 'VBoxManage' | sed 's/[[<].*//' | sort | uniq"
 alias matrix="cmatrix -abs"
 alias grep='grep --color'
 alias vim='nvim'
@@ -77,7 +77,7 @@ export LESS_TERMCAP_ue=$(tput sgr0)
 export LESS_TERMCAP_us=$(tput setaf 2)
 
 # Postgres configs
-export PGENV_ROOT=/opt/postgresql
+export PGENV_ROOT=$HOME/.local
 export PGDATA=$PGENV_ROOT/pgsql/data
 
 # make local executables and libraries visible
@@ -86,5 +86,6 @@ include_link_path $HOME/.local/pgsql/bin
 include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/*/bin
 include_path /opt/x-tools/*/bin
+include_lib $HOME/.local/lib
 
 [ -v TMUX ] || tmux
