@@ -3,7 +3,8 @@ export LC_CTYPE=en_US.UTF-8
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export PS1='\[\033[01;02;31m\]\u\[\033[01;03;37m\] ♰ \[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
+# U26A1
+export PS1='\[\033[01;02;31m\]\u\[\033[01;03;37m\]⚡\[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
