@@ -42,9 +42,10 @@ alias vim='nvim'
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-[ -d ~/.bash_tools ] && for tool in ~/.bash_tools/*; do source $tool; done
+[ -f $HOME/.bash_aliases ] && source $HOME/.bash_aliases
+[ -d $HOME/.bash_tools ] && mkdir -p $HOME/.bash_tools
 
-[ -f ~/.bash_aliases ] && source ~/.bash_aliases
+for tool in $HOME/.bash_tools/*; do source $tool; done
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -82,10 +83,10 @@ export PGDATA=$PGENV_ROOT/pgsql/data
 
 # make local executables and libraries visible
 include_path $HOME/.local/bin
+include_lib $HOME/.local/lib
 include_link_path $HOME/.local/pgsql/bin
 include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/*/bin
 include_path /opt/x-tools/*/bin
-include_lib $HOME/.local/lib
 
 [ -v TMUX ] || tmux
