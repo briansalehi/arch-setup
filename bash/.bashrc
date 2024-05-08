@@ -89,5 +89,6 @@ include_link_path $HOME/.local/pgsql/bin
 include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/*/bin
 include_path /opt/x-tools/*/bin
+include_path $HOME/.local/src/clang+llvm-17.0.6/bin
 
 [ -v TMUX ] || tmux
