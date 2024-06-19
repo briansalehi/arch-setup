@@ -4,7 +4,7 @@ export LC_CTYPE=en_US.UTF-8
 [[ $- != *i* ]] && return
 
 # U26A1
-export PS1='\[\033[01;02;31m\]\u\[\033[01;03;37m\]⚡\[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
+export PS1='\[\033[01;02;31m\]\u\[\033[01;37m\]⚡\[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -82,13 +82,20 @@ export LESS_TERMCAP_us=$(tput setaf 2)
 export PGENV_ROOT=$HOME/.local
 export PGDATA=$PGENV_ROOT/pgsql/data
 
+# nvm (node and npm installer)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # make local executables and libraries visible
-include_path $HOME/.local/bin
-include_lib $HOME/.local/lib
 include_link_path $HOME/.local/pgsql/bin
+include_path $HOME/projects/pgenv/bin
 include_path /opt/Qt/Tools/*/bin
-include_path /opt/Qt/[5,6]*/*/bin
+include_path /opt/Qt/[5,6]*/gcc_64/bin
 include_path /opt/x-tools/*/bin
 include_path $HOME/.local/src/clang+llvm-17.0.6/bin
+include_path $HOME/.local/bin
+include_lib $HOME/.local/lib
+include_lib /opt/Qt/*/gcc_64/lib
 
 [ -v TMUX ] || tmux
