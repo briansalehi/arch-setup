@@ -93,6 +93,7 @@ include_path $HOME/projects/pgenv/bin
 include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/gcc_64/bin
 include_path /opt/x-tools/*/bin
+include_path /opt/clion/latest/bin
 include_path $HOME/.local/src/clang+llvm-17.0.6/bin
 include_path $HOME/.local/bin
 include_lib $HOME/.local/lib
