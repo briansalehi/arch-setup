@@ -4,7 +4,7 @@ export LC_CTYPE=en_US.UTF-8
 [[ $- != *i* ]] && return
 
 # U26A1
-export PS1='\[\033[01;02;31m\]\u\[\033[01;37m\]⚡\[\033[00m\]\[\033[01;02;31m\]\h\[\033[00m\] \[\033[01;02;34m\]\W\[\033[00m\]\[\033[01;02;31m\]\$\[\033[00m\] '
+export PS1='\[\033[01;31m\]\u\[\033[01;37m\]⚡\[\033[00m\]\[\033[01;31m\]\h\[\033[00m\] \[\033[01;34m\]\W\[\033[00m\]\[\033[01;31m\]\$\[\033[00m\] '
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -64,19 +64,19 @@ export EDITOR=$(type -p nvim)
 # Less colors for man pages
 export PAGER='/usr/bin/less -S'
 # Begin blinking
-export LESS_TERMCAP_mb=$(tput setaf 1)
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)
 # Begin bold
-export LESS_TERMCAP_md=$(tput setaf 9)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 9)
 # End mode
 export LESS_TERMCAP_me=$(tput sgr0)
 # End standout-mode
 export LESS_TERMCAP_se=$(tput sgr0)
 # Begin standout-mode - info box
-export LESS_TERMCAP_so=$(tput setaf 5)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 5)
 # End underline
 export LESS_TERMCAP_ue=$(tput sgr0)
 # Begin underline
-export LESS_TERMCAP_us=$(tput setaf 2)
+export LESS_TERMCAP_us=$(tput bold; tput setaf 2)
 
 # Postgres configs
 export PGENV_ROOT=$HOME/.local
@@ -93,8 +93,10 @@ include_path $HOME/projects/pgenv/bin
 include_path /opt/Qt/Tools/*/bin
 include_path /opt/Qt/[5,6]*/gcc_64/bin
 include_path /opt/x-tools/*/bin
+include_path $HOME/.local/x-tools/*/bin
 include_path /opt/clion/latest/bin
 include_path $HOME/.local/src/clang+llvm-17.0.6/bin
+include_path $HOME/.dotnet/bin
 include_path $HOME/.local/bin
 include_lib $HOME/.local/lib
 include_lib /opt/Qt/*/gcc_64/lib
