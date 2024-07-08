@@ -82,19 +82,21 @@ Encrypt the file system:
 
 ```sh
 cryptsetup luksFormat /dev/nvme0n1p3
+cryptsetup luksFormat /dev/nvme0n1p4
 ```
 
-Decrypt the partition:
+Then decrypt the partitions to include them in fstab:
 
 ```sh
-cryptsetup --type luks /dev/nvme0n1p3 system_storage
+cryptsetup open --type luks /dev/nvme0n1p3 root_storage
+cryptsetup open --type luks /dev/nvme0n1p4 home_storage
 ```
 
-Setup LVM:
+At this point you can setup LVM:
 
 ```sh
-pvcreate /dev/mapper/system_storage
-vgcreate vg_system /dev/mapper/system_storage
+pvcreate /dev/mapper/root_storage
+vgcreate vg_system /dev/mapper/root_storage
 lvcreate -L 100GB vg_system -n lv_root
 lvcreate -L 500GB vg_system -n lv_home
 vgdisplay
@@ -138,7 +140,13 @@ You might also need these packages:
 **NOTE:** there will be Gnome Desktop installed on your system afterwards.
 
 ```sh
-pacstrap /mnt acpi aircrack-ng amd-ucode amdvlk amvlk archlinux-keyring automake base base-devel bash bash-completion bc bind binutils bison boost boost-libs bpf bpftrace bridge-utils bzip2 ca-certificates cargo ccache clang cmake cmatrix coreutils ctags cups curl docker doxygen eog evince fakeroot ffmpeg firefox firewalld flatpak fprintd g++ gcc gdb git github-cli gnome gnupg google-chrome gperf gperftools grep grub gstreamer gtest gzip htop jq jsoncpp kicad kicad-library less lesspipe linux linux-api-headers linux-firmware linux-hardened-headers linux-headers llvm llvm-libs lsof lynx lz4 make man man-db man-pages mdadm mesa mesa-utils meson mirro-rs mkinicpio mtr mutt nasm ncurses neovim neovim-lspconfig net-tools networkmanager nftables nmap ntfs-3g nvim openssh openssl openvpn pacman pacman-mirrorlist pacutils pam pambase patch patchutils perf picocom pinentry pkgconf plantuml protobuf protobuf-c python qemu-base qemu-docs qemu-system-aarch64 qemu-system-arm qemu-system-arm-firmware qemu-system-riscv qemu-system-riscv-firmware qemu-system-x86 qemu-system-x86-firmware qemu-tools qt5-base qt5-docs qt6-base qt6-docs rapidjson rsync samba sed shadow shellcheck shellharden smbclient steam strace sudo systemd systemd-libs systemd-sysvcompat tar telegram-desktop texlive-basic texlive-bibtexextra texlive-fontsextra texlive-fontsrecommended texlive-formatsextra texlive-latex texlive-latexextra texlive-latexrecommended texlive-pictures texlive-plaingeneric tmux tor traceroute ttf-sourcecodepro-nerd tzdata uboot-tools unrar unzip urlscan usbutils util-linux util-linux-libs valgrind vim virtualbox virtualbox-guest-iso virtualbox-guest-utils virtualbox-host-modules-arch vlc vulkan-headers vulkan-icd-loader vulkan-mesa-layers vulkan-radeon wget which wine winetricks wireless_tools wpa_supplicant xclip xz zip zoom
+pacstrap /mnt acpi amd-ucode amdvlk amvlk archlinux-keyring automake base base-devel bash bc bind binutils bison boost boost-libs bpf bpftrace bridge-utils bzip2 ca-certificates cargo ccache clang cmake cmatrix coreutils ctags cups curl docker doxygen eog evince fakeroot ffmpeg firewalld flatpak fprintd gcc gdb git github-cli gnome gnupg gperf gperftools grep grub gstreamer gtest gzip htop jq jsoncpp kicad kicad-library less lesspipe linux linux-api-headers linux-firmware linux-hardened-headers linux-headers llvm llvm-libs lsof lynx lz4 make man man-db man-pages mdadm mesa mesa-utils meson mirro-rs mkinicpio mtr mutt nasm ncurses neovim neovim-lspconfig net-tools networkmanager nftables nmap ntfs-3g nvim openssh openssl openvpn pacman pacman-mirrorlist pacutils pam pambase patch patchutils perf picocom pinentry pkgconf plantuml protobuf protobuf-c python qemu-base qemu-docs qemu-system-aarch64 qemu-system-arm qemu-system-arm-firmware qemu-system-riscv qemu-system-riscv-firmware qemu-system-x86 qemu-system-x86-firmware qemu-tools qt5-base qt6-base rapidjson rsync samba sed shadow shellcheck shellharden smbclient strace sudo systemd systemd-libs systemd-sysvcompat tar telegram-desktop texlive-basic texlive-bibtexextra texlive-fontsextra texlive-fontsrecommended texlive-formatsextra texlive-latex texlive-latexextra texlive-latexrecommended texlive-pictures texlive-plaingeneric tmux traceroute ttf-sourcecodepro-nerd tzdata uboot-tools unrar unzip urlscan usbutils util-linux util-linux-libs valgrind vim virtualbox virtualbox-guest-iso virtualbox-guest-utils virtualbox-host-modules-arch vlc vulkan-headers vulkan-icd-loader vulkan-mesa-layers vulkan-radeon wget which wireless_tools wpa_supplicant xsel xz zip
+```
+
+You should probably install these packages later as they will not be available now:
+
+```sh
+aircrack-ng bash-completion g++ google-chrome steam wine winetricks zoom
 ```
 
 Then generate file system table for next reboot:
@@ -146,6 +154,25 @@ Then generate file system table for next reboot:
 ```sh
 genfstab -U /mnt >> /mnt/etc/fstab
 ```
+
+If partitions are locked by `cryptsetup`, then make sure the root partition is
+not specified by **UUID**, but as `/dev/mapper/root_storage`. This is because
+the encrypted parition should be decrypted first and fstab should know where
+should be the decrypted path.
+
+But make sure the rest of encrypted partitions are written with **UUID** of
+decrypted paths.
+
+When using encrypted drives, you should also write the following records into
+`/etc/crypttab`:
+
+```sh
+home_storage UUID=1234-abcd none luks
+```
+
+There should not be root partition address here because initcpio should already
+be decrypting the root partition on boot, this is just for the rest of
+encrypted partitions.
 
 Now chroot into the Linux installed partition:
 
@@ -189,6 +216,14 @@ mkinitcpio -P
 This is where `amd-ucode`, `grub` and `efibootmgr` is needed so that the system
 can boot:
 
+If using encrypted drives, make sure you also include this in kernel command line `GRUB_CMDLINE_LINUX` inside `/etc/default/grub`:
+
+```sh
+GRUB_CMDLINE_LINUX="cryptdevice=UUID=1234-abcd:root_storage root=/dev/mapper/root_storage"
+```
+
+Then generate grub configurations:
+
 ```sh
 grub-install --target x86_64-efi --efi-directory /boot --bootloader-id GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -214,6 +249,22 @@ into the `root` user anymore.
 Also if this is a remote server, configure SSH so that service is on different
 port and `root` login cannot be made.
 
+You might realize that Arch Linux makes a lot of loud beeps because of PC
+speaker module. To disable it, `pcspkr` driver should be blocked:
+
+```sh
+rmmod pcspkr
+echo 'blacklist pcspkr' > /etc/modprobe.d/pcspkr.conf
+```
+
+You might also face problems when running a virtual machine instance,
+VirtualBox complaining that module is not loaded. This is simple to fix by
+loading its module:
+
+```sh
+modprobe vboxdrv
+```
+
 Now go back to live boot shell and unmount all partitions:
 
 ```sh
@@ -225,28 +276,9 @@ reboot
 After reboot, enable desired services:
 
 ```sh
-systemctl enable --now sshd
-systemctl enable --now tor
 systemctl enable --now gdm
-```
-
-## PC Speaker
-
-You might realize that Arch Linux makes a lot of loud beeps because of PC
-speaker module. To disable it, `pcspkr` driver should be blocked:
-
-```sh
-rmmod pcspkr
-echo 'blacklist pcspkr' > /etc/modprobe.d/pcspkr.conf
-```
-
-## VirtualBox Kernel Module
-
-You might face problems when running a virtual machine instance, VirtualBox
-complaining that module is not loaded. This is simple to fix by loading its
-module:
-
-```sh
-modprobe vboxdrv
+systemctl enable --now sshd
+systemctl enable --now NetworkManager
+systemctl enable --now bluetooth
 ```
 
