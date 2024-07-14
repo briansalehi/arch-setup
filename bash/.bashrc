@@ -83,7 +83,14 @@ export PGENV_ROOT=$HOME/.local
 export PGDATA=$PGENV_ROOT/pgsql/data
 
 # nvm (node and npm installer)
-source /usr/share/nvm/init-nvm.sh
+if [ -s /usr/share/nvim/init-nvim.sh ]
+then
+    source /usr/share/nvm/init-nvm.sh
+else
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+fi
 
 # make local executables and libraries visible
 include_link_path $HOME/.local/pgsql/bin
