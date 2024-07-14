@@ -83,9 +83,7 @@ export PGENV_ROOT=$HOME/.local
 export PGDATA=$PGENV_ROOT/pgsql/data
 
 # nvm (node and npm installer)
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+source /usr/share/nvm/init-nvm.sh
 
 # make local executables and libraries visible
 include_link_path $HOME/.local/pgsql/bin
@@ -102,3 +100,6 @@ include_lib $HOME/.local/lib
 include_lib /opt/Qt/*/gcc_64/lib
 
 [ -v TMUX ] || tmux
+
+alias poweroff="(sleep 0.5 && poweroff); kill $(pgrep tmux | xargs)"
+alias reboot="(sleep 0.5 && reboot); kill $(pgrep tmux | xargs)"
