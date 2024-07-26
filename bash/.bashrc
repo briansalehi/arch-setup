@@ -82,6 +82,9 @@ export LESS_TERMCAP_us=$(tput bold; tput setaf 2)
 export PGENV_ROOT=$HOME/.local
 export PGDATA=$PGENV_ROOT/pgsql/data
 
+# Make default configuration
+export CXXFLAGS="-std=c++23"
+
 # nvm (node and npm installer)
 if [ -s /usr/share/nvim/init-nvim.sh ]
 then

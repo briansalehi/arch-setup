@@ -207,7 +207,14 @@ echo '<hostname>' > /etc/hostname
 ```
 
 Now this is not necessary, but it would be if you have made LVM, RAID, or LUKS
-configurations, see `mkinitcpio.conf(5)`:
+configurations, see `mkinitcpio.conf(5)`. Generally the `/etc/mkinitcpio.conf`
+file should have this hook when LUKS used:
+
+```sh
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap encrypt consolefont block filesystems fsck)
+```
+
+Then run:
 
 ```sh
 mkinitcpio -P
