@@ -97,9 +97,9 @@ fi
 
 # make local executables and libraries visible
 include_link_path $HOME/.local/pgsql/bin
+include_link_path /opt/Qt/[5,6]*/gcc_64/bin
 include_path $HOME/projects/pgenv/bin
 include_path /opt/Qt/Tools/*/bin
-include_path /opt/Qt/[5,6]*/gcc_64/bin
 include_path /opt/x-tools/*/bin
 include_path $HOME/.local/x-tools/*/bin
 include_path /opt/clion/latest/bin
