@@ -97,17 +97,19 @@ else
 fi
 
 # make local executables and libraries visible
-include_path $HOME/.local
+include_path /opt/qt/Tools/*/bin
+include_path /opt/qt/*/gcc_64
+include_path /opt/Qt/Tools/*/bin
+include_path /opt/Qt/*/gcc_64
+include_path /opt/clion/latest/bin
+include_path /opt/x-tools/*/bin
 include_path $HOME/.local/pgsql/bin
 include_path $HOME/.local/src/clang+llvm-17.0.6/bin
 include_path $HOME/.local/src/qt*/[5,6]*/gcc_64
 include_path $HOME/.local/x-tools/*/bin
 include_path $HOME/.dotnet/bin
 include_path $HOME/projects/pgenv/bin
-include_path /opt/Qt/Tools/*/bin
-include_path /opt/Qt/*/gcc_64
-include_path /opt/clion/latest/bin
-include_path /opt/x-tools/*/bin
+include_path $HOME/.local
 
 [ -v TMUX ] || tmux
 
