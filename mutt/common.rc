@@ -1,0 +1,35 @@
+set use_from = yes
+set header_cache = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/certificates"
+set imap_keepalive = 900
+set timeout = 60
+set editor = "/usr/bin/nvim"
+set edit_headers = yes
+set charset = UTF-8
+set metoo = yes
+set copy = no
+set sort = threads
+set sort_aux = reverse-last-date-received
+set move = no
+set pager_stop
+unset use_domain
+
+# key bindings
+bind index G imap-fetch-mail
+bind index ^j next-unread
+bind index ^k previous-unread
+
+# cache
+set header_cache =~/.mutt/cache/headers
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+
+# w3m
+auto_view text/html
+alternative_order text/plain text/enriched text/html
+set mailcap_path = ~/.mutt/mailcap
+
+# urlscan
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
