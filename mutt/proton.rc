@@ -1,23 +1,17 @@
-set folder = "imap://127.0.0.1:1143"
-set imap_user = "briansalehi@proton.me"
-set smtp_url = "smtp://127.0.0.1:1025"
-set smtp_user = "briansalehi@proton.me"
-
-source 'gpg --decrypt ~/.mutt/proton.asc |'
-
-set from = "briansalehi@proton.me"
-set realname = "Brian Salehi"
-
-set ssl_force_tls = yes
-set ssl_starttls = yes
-set ssl_verify_host = yes
-set ssl_verify_dates = yes
-
-# Folders
+set realname = 'Brian Salehi'
+set from = 'briansalehi@proton.me'
+set imap_user = 'briansalehi@proton.me'
+set smtp_url = 'smtp://127.0.0.1:1025'
+set smtp_user = 'briansalehi@proton.me'
+set folder = 'imap://127.0.0.1:1143'
 set spoolfile = "+INBOX"
 set mbox = "+Inbox"
 set record = "+Sent"
 set postponed = "+Drafts"
 set trash = "+Trash"
+set ssl_force_tls = yes
+set ssl_starttls = yes
+set ssl_verify_host = yes
+set ssl_verify_dates = yes
 
-mailboxes "=INBOX"
+source 'gpg --decrypt ~/.mutt/proton.asc |'
