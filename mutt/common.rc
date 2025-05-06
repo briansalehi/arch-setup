@@ -13,6 +13,7 @@ set sort = threads
 set sort_aux = reverse-last-date-received
 set move = no
 set pager_stop
+set resolve
 
 unset use_domain
 
