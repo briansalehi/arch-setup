@@ -4,7 +4,7 @@ set imap_user = 'briansalehi@proton.me'
 set smtp_url = 'smtp://127.0.0.1:1025'
 set smtp_user = 'briansalehi@proton.me'
 set folder = 'imap://127.0.0.1:1143'
-set spoolfile = "+INBOX"
+set spoolfile = "+Inbox"
 set mbox = "+Inbox"
 set record = "+Sent"
 set postponed = "+Drafts"
@@ -15,3 +15,5 @@ set ssl_verify_host = yes
 set ssl_verify_dates = yes
 
 source 'gpg --decrypt ~/.mutt/proton.asc |'
+
+mailboxes +Inbox +Sent +Drafts +Trash +Archive +Technical +Financial

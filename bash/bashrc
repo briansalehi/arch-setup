@@ -102,10 +102,12 @@ fi
 # make local executables and libraries visible
 include_path $ANDROID_HOME/cmdline-tools/latest
 include_path $ANDROID_HOME/platform-tools
-include_path /opt/qt/Tools/*/bin
+include_path /opt/qt/Tools/*
 include_path /opt/qt/*/gcc_64
-include_path /opt/Qt/Tools/*/bin
+include_path /opt/qt/Tools/QtDesignStudio/lib/Qt
+include_path /opt/Qt/Tools/*
 include_path /opt/Qt/*/gcc_64
+include_path /opt/Qt/Tools/QtDesignStudio/lib/Qt
 include_path /opt/clion/latest
 include_path /opt/x-tools/*/bin
 include_path $HOME/.local/pgsql
@@ -117,7 +119,7 @@ include_path $HOME/.cargo
 include_path $HOME/projects/pgenv
 include_path $HOME/.local
 
-[ -v TMUX ] || tmux
+[ -z "$TMUX" ] && [ -z "$TERMINAL_EMULATOR" ] && tmux
 
 alias poweroff="(sleep 0.5 && poweroff); kill $(pgrep tmux | xargs)"
 alias reboot="(sleep 0.5 && reboot); kill $(pgrep tmux | xargs)"

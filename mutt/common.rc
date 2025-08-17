@@ -8,19 +8,25 @@ set editor = "/usr/bin/nvim"
 set edit_headers = yes
 set charset = UTF-8
 set metoo = yes
-set copy = no
 set sort = threads
 set sort_aux = reverse-last-date-received
-set move = no
 set pager_stop
-set resolve
+set sidebar_visible
+set sidebar_format = "%B%<F? [%F]>%* %<N?%N/>%S"
+set mail_check_stats
 
-unset use_domain
+#set copy = no
+#set move = no
+#set resolve
+#unset use_domain
 
 # key bindings
 bind index G imap-fetch-mail
-bind index ^j next-unread
-bind index ^k previous-unread
+bind index \cj next-unread
+bind index \ck previous-unread
+bind index,pager \ci sidebar-prev
+bind index,pager \cu sidebar-next
+bind index,pager \co sidebar-open
 
 # cache
 set header_cache =~/.mutt/cache/headers
