@@ -38,11 +38,19 @@ fi
 
 # Alias definitions.
 alias ls='ls --color=auto'
-alias ll='ls -hl --color=auto --group-directories-first'
 alias vboxmanage-cmd="vboxmanage | grep 'VBoxManage' | sed 's/[[<].*//' | sort | uniq"
 alias matrix="cmatrix -abs"
 alias grep='grep --color'
-alias vim='nvim'
+command -v nvim &>/dev/null && alias vim='nvim'
+
+case "$(uname)" in
+    Linux)
+        alias ll='ls -hl --color=auto --group-directories-first'
+        ;;
+    Darwin)
+        alias ll='ls -hl --color=auto'
+        ;;
+esac
 
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
