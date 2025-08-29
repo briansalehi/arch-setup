@@ -126,6 +126,7 @@ include_path /opt/Qt/Tools/QtInstallerFramework/*
 include_path /opt/qt/*/gcc_64
 include_path /opt/qt/Tools/*
 include_path /opt/qt/Tools/QtDesignStudio/lib/Qt
+include_path /opt/homebrew
 include_path $HOME/.local/pgsql
 include_path $HOME/.local/src/qt*/[5,6]*/gcc_64
 include_path $HOME/.local/x-tools/*/bin
