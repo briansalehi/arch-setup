@@ -1,17 +1,18 @@
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35muptime:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mlast shutdown: \e[2;3;35muptime\e[0;2;37m" | tee -a ~/.record.txt
 uptime | tee -a ~/.record.txt
 
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35mfree:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mmemory usage: \e[2;3;35mfree\e[0;2;37m" | tee -a ~/.record.txt
 free -h | tee -a ~/.record.txt
 
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35mlast:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mlast logins: \e[2;3;35mlast\e[0;2;37m" | tee -a ~/.record.txt
 last -n 3 | tee -a ~/.record.txt
 
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35mlastb:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mlast failed logins: \e[2;3;35mlastb\e[0;2;37m" | tee -a ~/.record.txt
 lastb -n 3 2>/dev/null | tee -a ~/.record.txt
 
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35mss:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mopen ports: \e[2;3;35mss\e[0;2;37m" | tee -a ~/.record.txt
 ss -antulp | grep -vw -E '53|5353|5355'
 
-echo -e "\e[1;2;31m$(date +%Y-%m-%d) \e[2;35mps:\e[0;2;37m" | tee -a ~/.record.txt
+echo -e "\e[1;2;31mactive processes: \e[2;3;35mps\e[0;2;37m" | tee -a ~/.record.txt
 ps -eo pid,ppid,user,%cpu,%mem,cmd --sort=%cpu | head -n 5 | tee -a ~/.record.txt
+echo -ne "\e[0m"
